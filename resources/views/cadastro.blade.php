@@ -43,7 +43,10 @@
 					</div>
 					<button type="submit" class="btn btn-primary btn-block mb-4">Cadastrar</button>
 					<div class="text-center">
-                            <p>Já tem uma conta? <a href="/" >Entrar</a></p>
+                            <p>Já tem uma conta? <a href="/login" >Entrar</a></p>
+                    </div>
+					<div class="text-center">
+                        <p><a href="/" >Entrar sem cadastro</a></p>
                     </div>
 				</form>
 			</div>

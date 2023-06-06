@@ -38,6 +38,9 @@
                     <div class="text-center">
                         <p>Não tem uma conta? <a href="/cadastro" >Registrar</a></p>
                     </div>
+                    <div class="text-center">
+                        <p><a href="/" >Entrar sem login</a></p>
+                    </div>
                 </form>
             </div>
         </div>

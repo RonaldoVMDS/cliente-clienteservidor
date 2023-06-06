@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CadastroController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OccurrenceController;
 
 
 /*
@@ -17,12 +18,19 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-});
+Route::get('/', [OccurrenceController::class, 'index']);
+Route::get('/occurrence', [OccurrenceController::class, 'index'])->name('occurrences');
+Route::get('/occurrences/{id}', [OccurrenceController::class, 'getUserOccurrences']);
+Route::post('/occurrences', [OccurrenceController::class, 'store'])->name('ocorrencias.store');
+Route::post('/user/{id}', [UserController::class, 'update']);
+
 
 Route::get('/cadastro', function () {
     return view('cadastro');
+});
+
+Route::get('/login', function () {
+    return view('login');
 });
 Route::get('/erro', function () {
     return view('erro');
