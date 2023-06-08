@@ -182,7 +182,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="password">Nova Senha:</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="password">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>

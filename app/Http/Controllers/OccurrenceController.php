@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use DateTime;
+use DateTimeZone;
 
 class OccurrenceController extends Controller
 {
@@ -110,14 +111,19 @@ class OccurrenceController extends Controller
     public function store(Request $request)
     {
         $registered_at = $request->input('registered_at');
-        // Converta a string para um objeto DateTime
         $registered_at = DateTime::createFromFormat('Y-m-d\TH:i', $registered_at);
 
-        // Adicione os segundos à hora
+        // Adicione os segundos e milissegundos à hora
         $registered_at->setTime($registered_at->format('H'), $registered_at->format('i'), 0);
+        $registered_at->setTime(0, 0, 0, 0);
+
+        // Converta para o fuso horário UTC
+        $registered_at->setTimezone(new DateTimeZone('UTC'));
 
         // Agora você tem o valor no formato desejado
-        $registered_at = $registered_at->format('Y-m-d H:i:s');
+        $registered_at = $registered_at->format('Y-m-d\TH:i:s.v\Z');
+
+
         $local = $request->input('local');
         $km = $request->input('km');
         $occurrence_type = $request->input('occurrence_type');
@@ -135,9 +141,9 @@ class OccurrenceController extends Controller
         $data = [
             'registered_at' => $registered_at,
             'local' => $local,
-            'km' => $km,
-            'occurrence_type' => $occurrence_type,
-            'user_id' => $user_id
+            'km' => intval($km),
+            'occurrence_type' => intval($occurrence_type),
+            'user_id' => intval($user_id)
         ];
 
         // Enviar a requisição para a API para obter as ocorrências
