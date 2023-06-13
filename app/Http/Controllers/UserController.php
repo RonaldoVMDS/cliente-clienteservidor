@@ -159,10 +159,15 @@ class UserController extends Controller
         $email = $request->input('email');
         $name = $request->input('name');
         $id = intval($idRequest);
+        if ($senha == ''){
+            $senha = null;
+        }else{
+            $senha = md5($senha);
+        }
         $data = [
             'email' => $email,
             'name' => $name,
-            'password' => md5($senha),
+            'password' => $senha,
         ];
         // Configurações do cliente HTTP
         $apiServer = env('API_SERVER');

@@ -115,7 +115,6 @@ class OccurrenceController extends Controller
 
         // Adicione os segundos e milissegundos à hora
         $registered_at->setTime($registered_at->format('H'), $registered_at->format('i'), 0);
-        $registered_at->setTime(0, 0, 0, 0);
 
         // Converta para o fuso horário UTC
         $registered_at->setTimezone(new DateTimeZone('UTC'));
