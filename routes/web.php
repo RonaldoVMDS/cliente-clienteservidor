@@ -23,6 +23,7 @@ Route::get('/occurrence', [OccurrenceController::class, 'index'])->name('occurre
 Route::post('/occurrences/users/{id}', [OccurrenceController::class, 'getUserOccurrences']);
 Route::post('/occurrences', [OccurrenceController::class, 'store'])->name('ocorrencias.store');
 Route::post('/user/{id}', [UserController::class, 'update']);
+Route::post('/user/remove/{id}', [UserController::class, 'delete']);
 Route::post('/occurrences/delete', [OccurrenceController::class, 'delete'])->name('ocorrencias.delete');
 Route::post('/occurrences/update', [OccurrenceController::class, 'update'])->name('ocorrencias.update');
 Route::get('/cadastro', function () {

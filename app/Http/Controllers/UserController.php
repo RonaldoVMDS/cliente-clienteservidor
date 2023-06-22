@@ -207,4 +207,45 @@ class UserController extends Controller
             return $this->showErrorPage($statusCode, $errorMessage, 'Erro na requisição para a API de atualização do usuário');
         }
     }
+    public function delete(Request $request, string $idRequest)
+    {
+        $token = $request->input('token');
+        $id = intval($idRequest);
+        // Configurações do cliente HTTP
+        $apiServer = env('API_SERVER');
+        $client = new Client(['base_uri' => $apiServer]);
+
+        try {
+            $response = $client->delete("users/$id", [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $token,
+                    'Accept' => 'application/json',
+                ],
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $content = $response->getBody()->getContents();
+            
+            if ($statusCode == 200) {
+                // Dados do usuário atualizados com sucesso
+                // Redirecionar para a página desejada ou retornar uma resposta adequada
+                return redirect('/login')->with('message', 'Usuário removido com sucesso.');
+            } else {
+                return $this->showErrorPage($statusCode, $content, 'Falha ao apagar dados do usuário');
+            }
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $statusCode = $response->getStatusCode();
+                $content = $response->getBody()->getContents();
+                $errorData = json_decode($content, true);
+                $errorMessage = $errorData['message'];
+            } else {
+                $statusCode = 500;
+                $errorMessage = 'Erro na requisição para a API de atualização do usuário';
+            }
+
+            return $this->showErrorPage($statusCode, $errorMessage, 'Erro na requisição para a API de atualização do usuário');
+        }
+    }
 }

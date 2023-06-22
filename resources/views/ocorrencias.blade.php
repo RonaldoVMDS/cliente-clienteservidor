@@ -96,6 +96,15 @@
                             <input type="hidden" name="token" value="{{ $userData['token'] }}">
                             <button type="submit" class="btn btn-primary mt-2">Logout</button>
                         </form>
+                        <button type="button" class="btn btn-danger mt-2" data-toggle="modal" data-target="#deleteUserModal">
+                            Excluir minha Conta
+                        </button>
+                        <!-- <form method="POST" action="user/remove/{{ $userData['id'] }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $userData['id'] }}">
+                            <input type="hidden" name="token" value="{{ $userData['token'] }}">
+                            <button type="submit" class="btn btn-danger mt-2">Remover conta</button>
+                        </form> -->
                     </div>
                 </div>
             </div>
@@ -203,6 +212,86 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                                 <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add Occurrence Modal HTML -->
+        <div id="addOccurrenceModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" action="/occurrences/">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{ $userData['id'] }}">
+                        <input type="hidden" name="token" value="{{ $userData['token'] }}">
+                        <input type="hidden" name="name" value="{{ $userData['name'] }}">
+                        <input type="hidden" name="email" value="{{ $userData['email'] }}">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Adicionar Ocorrência</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Data de Registro</label>
+                                <input type="datetime-local" name='registered_at' class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Local</label>
+                                <input type="text" name="local" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Ocorrência</label>
+                                <select class="form-control" name="occurrence_type" required>
+                                    <option value="1">Atropelamento</option>
+                                    <option value="2">Deslizamento</option>
+                                    <option value="3">Colisão frontal</option>
+                                    <option value="4">Capotagem</option>
+                                    <option value="5">Saída de pista</option>
+                                    <option value="6">Batida em objeto fixo</option>
+                                    <option value="7">Veículo avariado</option>
+                                    <option value="8">Colisão com motocicletas</option>
+                                    <option value="9">Colisão no mesmo sentido ou transversal</option>
+                                    <option value="10">Construção</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>KM</label>
+                                <input type="text" name="km" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                            <input type="submit" class="btn btn-success" value="Adicionar">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteUserModalLabel">Excluir usuário</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Formulário de deleção do usuário -->
+                        <form action="/user/remove/{{ $userData['id'] }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $userData['id'] }}">
+                            <input type="hidden" name="token" value="{{ $userData['token'] }}">
+                            <div class="modal-body">
+                                <p>Tem certeza que deseja apagar este usuário?</p>
+                                <p class="text-warning"><small>Essa ação não pode ser desfeita.</small></p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary">Remover minha conta</button>
                             </div>
                         </form>
                     </div>
