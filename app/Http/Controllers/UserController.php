@@ -184,7 +184,7 @@ class UserController extends Controller
 
             $statusCode = $response->getStatusCode();
             $content = $response->getBody()->getContents();
-
+            
             if ($statusCode == 200) {
                 // Dados do usuário atualizados com sucesso
                 // Redirecionar para a página desejada ou retornar uma resposta adequada

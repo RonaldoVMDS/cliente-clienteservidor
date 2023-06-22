@@ -20,11 +20,11 @@ use App\Http\Controllers\OccurrenceController;
 
 Route::get('/', [OccurrenceController::class, 'index']);
 Route::get('/occurrence', [OccurrenceController::class, 'index'])->name('occurrences');
-Route::get('/occurrences/{id}', [OccurrenceController::class, 'getUserOccurrences']);
+Route::post('/occurrences/users/{id}', [OccurrenceController::class, 'getUserOccurrences']);
 Route::post('/occurrences', [OccurrenceController::class, 'store'])->name('ocorrencias.store');
 Route::post('/user/{id}', [UserController::class, 'update']);
-
-
+Route::post('/occurrences/delete', [OccurrenceController::class, 'delete'])->name('ocorrencias.delete');
+Route::post('/occurrences/update', [OccurrenceController::class, 'update'])->name('ocorrencias.update');
 Route::get('/cadastro', function () {
     return view('cadastro');
 });

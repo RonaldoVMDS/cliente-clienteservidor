@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Adicione o link para o arquivo CSS do Toastr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- Outras tags do cabeçalho aqui -->
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -38,6 +40,20 @@
                 if (!this.checked) {
                     $("#selectAll").prop("checked", false);
                 }
+            });
+            $('#deleteEmployeeModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Botão que acionou o modal
+                var ocorrenciaId = button.data('id'); // Extrai o ID da ocorrência do atributo data-id
+
+                // Atualiza o valor do campo oculto com o ID da ocorrência
+                $('#deleteEmployeeModal input[name="ocorrencia_id"]').val(ocorrenciaId);
+            });
+            $('#editEmployeeModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Botão que acionou o modal
+                var ocorrenciaId = button.data('id'); // Extrai o ID da ocorrência do atributo data-id
+
+                // Atualiza o valor do campo oculto com o ID da ocorrência
+                $('#editEmployeeModal input[name="ocorrencia_id"]').val(ocorrenciaId);
             });
         });
     </script>
@@ -97,7 +113,7 @@
                             <div class="col-sm-6">
                                 @if (isset($userData))
                                 <a href="#addOccurrenceModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Adicionar ocorrência</span></a>
-                                <form method="GET" action="occurrences/{{ $userData['id'] }}">
+                                <form method="POST" action="occurrences/users/{{ $userData['id'] }}">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $userData['id'] }}">
                                     <input type="hidden" name="token" value="{{ $userData['token'] }}">
@@ -137,8 +153,8 @@
                                 <td>{{ $ocorrencia['km'] }}</td>
                                 <td>
                                     @if (isset($userData) && $ocorrencia['user_id'] == $userData['id'] )
-                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="{{ $ocorrencia['id'] }}"><i class="material-icons" data-toggle="tooltip" title="Editar">&#xE254;</i></a>
+                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="{{ $ocorrencia['id'] }}"><i class="material-icons" data-toggle="tooltip" title="Excluir">&#xE872;</i></a>
                                     @endif
                                 </td>
                             </tr>
@@ -197,7 +213,7 @@
         <div id="addOccurrenceModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form method="POST" action="{{ route('ocorrencias.store') }}">
+                    <form method="POST" action="/occurrences/">
                         @csrf
                         <input type="hidden" name="user_id" value="{{ $userData['id'] }}">
                         <input type="hidden" name="token" value="{{ $userData['token'] }}">
@@ -248,32 +264,49 @@
         <div id="editEmployeeModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form>
+                    <form method="post" action="{{ route('ocorrencias.update') }}">
+                        @csrf
+                        <input type="hidden" name="ocorrencia_id">
+                        <input type="hidden" name="user_id" value="{{ $userData['id'] }}">
+                        <input type="hidden" name="token" value="{{ $userData['token'] }}">
+                        <input type="hidden" name="name" value="{{ $userData['name'] }}">
+                        <input type="hidden" name="email" value="{{ $userData['email'] }}">
                         <div class="modal-header">
-                            <h4 class="modal-title">Edit Employee</h4>
+                            <h4 class="modal-title">Editar Ocorrência</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" class="form-control" required>
+                                <label>Data de Registro</label>
+                                <input type="datetime-local" name='registered_at' class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" class="form-control" required>
+                                <label>Local</label>
+                                <input type="text" name="local" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Address</label>
-                                <textarea class="form-control" required></textarea>
+                                <label>Tipo de Ocorrência</label>
+                                <select class="form-control" name="occurrence_type" required>
+                                    <option value="1">Atropelamento</option>
+                                    <option value="2">Deslizamento</option>
+                                    <option value="3">Colisão frontal</option>
+                                    <option value="4">Capotagem</option>
+                                    <option value="5">Saída de pista</option>
+                                    <option value="6">Batida em objeto fixo</option>
+                                    <option value="7">Veículo avariado</option>
+                                    <option value="8">Colisão com motocicletas</option>
+                                    <option value="9">Colisão no mesmo sentido ou transversal</option>
+                                    <option value="10">Construção</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label>Phone</label>
-                                <input type="text" class="form-control" required>
+                                <label>KM</label>
+                                <input type="text" name="km" class="form-control" required>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                            <input type="submit" class="btn btn-info" value="Save">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                            <input type="submit" class="btn btn-info" value="Atualizar">
                         </div>
                     </form>
                 </div>
@@ -283,18 +316,24 @@
         <div id="deleteEmployeeModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form>
+                    <form method="post" action="{{ route('ocorrencias.delete') }}">
+                        @csrf
+                        <input type="hidden" name="ocorrencia_id">
+                        <input type="hidden" name="user_id" value="{{ $userData['id'] }}">
+                        <input type="hidden" name="token" value="{{ $userData['token'] }}">
+                        <input type="hidden" name="name" value="{{ $userData['name'] }}">
+                        <input type="hidden" name="email" value="{{ $userData['email'] }}">
                         <div class="modal-header">
-                            <h4 class="modal-title">Delete Employee</h4>
+                            <h4 class="modal-title">Excluir ocorrência</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure you want to delete these Records?</p>
-                            <p class="text-warning"><small>This action cannot be undone.</small></p>
+                            <p>Tem certeza que deseja apagar este registro?</p>
+                            <p class="text-warning"><small>Essa ação não pode ser desfeita.</small></p>
                         </div>
                         <div class="modal-footer">
-                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                            <input type="submit" class="btn btn-danger" value="Delete">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                            <input type="submit" class="btn btn-danger" value="Excluir">
                         </div>
                     </form>
                 </div>
