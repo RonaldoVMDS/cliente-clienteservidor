@@ -97,8 +97,7 @@ class OccurrenceController extends Controller
 
             if ($statusCode == 200) {
                 // Extrair as ocorrências do conteúdo da resposta
-                $ocorrencias = json_decode($content, true)['occurrences'];
-
+                $ocorrencias = json_decode($content, true);
                 // Retornar a view com as ocorrências do usuário
                 return view('ocorrencias', ['userData' => $userData, 'ocorrencias' => $ocorrencias]);
             } else {
@@ -228,7 +227,6 @@ class OccurrenceController extends Controller
                     'userData' => $userData,
                     'ocorrencias' => $ocorrencias
                 ]);
-                
             } else {
                 return $this->showErrorPage($statusCode, $content, 'Falha ao obter as ocorrências');
             }

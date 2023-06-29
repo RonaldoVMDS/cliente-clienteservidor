@@ -80,7 +80,6 @@ class UserController extends Controller
         // Enviar a requisição para a API usando o GuzzleHttp
         $apiServer = env('API_SERVER');
         $client = new Client(['base_uri' => $apiServer]);
-
         try {
             $response = $client->post('/login', [
                 'headers' => ['Content-Type' => 'application/json'],
